@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>博文列表</title>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/style.css">
+<script type="text/javascript" src="__PUBLIC__/js/jquery-3.1.0.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/bootstrap.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+<div class="opicon row">
+    <div class="col-md-1" style="margin: 15px 50px 15px 0;">
+    <a href="{:U('/Admin/Blog/add_blog')}">
+    <button type="button" class="btn btn-success"><span class="glyphicon glyphicon-plus-sign"></span>&nbsp;添加博文</button>
+    </a>
+    </div>
+	<div class="col-md-9" style="margin: 8px 0;">
+		<form action="{:U('/Admin/Blog/index')}" method="post" class="navbar-form" role="search">
+			<div class="form-group">
+		      <label for="cat" class="control-label">分类</label>
+		        <select name="cat" id="cat" class="form-control">
+		          <option value="">全部</option>
+		             <volist name="cat_info" id="vo">
+		               <option value="{$vo.name}">{$vo.name}</option>
+		             </volist>
+		        </select> 
+            </div>
+            <div class="form-group col-md-offset-1">
+            <label for="keywords" class="control-label">关键词</label>
+               <input type="text" class="form-control" name="keywords" placeholder="请输入关键词">
+               <input type="submit" class="btn btn-default" value="查询">
+            </div>
+	    </form>
+    </div>
+</div>
+<div class="list">
+	<form>
+	    <table class="table table-bordered">
+	        <thead>
+	        <tr class="active">
+	            <th>编号</th>
+	            <th>封面</th>
+	            <th>博文标题</th>
+	            <!-- <th>博文内容</th> -->
+	            <th>所属分类</th>
+	            <th>头像</th>
+	            <th>发布人</th>
+	            <th>评论数</th>
+	            <th>阅读数</th>
+	            <th>添加时间</th>
+	            <th>修改时间</th>
+	            <th>操作</th>
+	        </tr>
+	        </thead>
+	        <volist name="info" id="v">
+	        <tbody>
+	        <tr>
+	            <td>{$v.blog_id}</td> 
+	            <td><img src="__PUBLIC__/{$v.blog_small_img}" width="25px" height="25px"></td>
+	            <td>{$v.title}</td>
+				<!-- <td>{$v.content|msubstr=0,10,'utf-8',true}</td> -->
+				<td>{$v.cat}</td>
+				<td><img src="__PUBLIC__/{$v.author_img}" width="25px" height="25px"></td>
+				<td>{$v.author}</td>
+				<td>{$v.com_count}</td>
+				<td>{$v.visit_count}</td>
+	            <td>{$v.add_time|date="Y-m-d H:i:s",###}</td>
+	            <td>
+                    <if condition="$v['update_time'] gt 0">
+                    	{$v.update_time|date="Y-m-d H:i:s",###}
+                    	<else/>
+                    	未修改
+                    </if>
+	            </td>
+	            <td class="operation">
+	            <a href="{:U('/Admin/Blog/edit_blog/blog_id/'.$v['blog_id'])}">
+	            <button type="button" class="btn btn-default btn-xs btn-primary">
+	            <span class="glyphicon glyphicon-edit"></span>
+	            编辑
+	            </button>
+	            </a>
+	            <a href="{:U('/Admin/Blog/del_blog/blog_id/'.$v['blog_id'])}">
+	            <button type="button" class="btn btn-default btn-xs btn-danger">
+	            <span class="glyphicon glyphicon-trash"></span>
+	            删除</button>
+	            </a>
+	            </td>
+	        </tr>
+	        </tbody>
+	        </volist>
+	    </table>
+	</form>
+	<div class="page">{$show}</div>
+</div>
+</div>
+</body>
+</html>

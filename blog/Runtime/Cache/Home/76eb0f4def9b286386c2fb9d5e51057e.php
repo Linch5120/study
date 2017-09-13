@@ -1,0 +1,208 @@
+<?php if (!defined('THINK_PATH')) exit();?><!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>文章详情</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<link rel="stylesheet" type="text/css" href="/thinkphp/blog/Public/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="/thinkphp/blog/Public/css/style.css">
+<script type="text/javascript" src="/thinkphp/blog/Public/js/jquery-3.1.0.min.js"></script>
+<script type="text/javascript" src="/thinkphp/blog/Public/js/bootstrap.js"></script>
+</head>
+<body style="background: #eee;">
+<!-- 头部导航栏 -->
+<div id="header">
+    <nav class="navbar navbar-fixed-top" role="navigation" style="background: #fff;">
+      <div class="container-fluid">
+		 <div class="navbar-header">
+		      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+		        <span class="sr-only">Toggle navigation</span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		      </button>
+		      <a class="navbar-brand" href="<?php echo U('/Home/Upload/index');?>"><span style="color: #278B2D; font-size: 30px; font-family: 幼圆; margin-left: 100px;">情感说</span></a>
+		    </div>
+
+		    <!-- Collect the nav links, forms, and other content for toggling -->
+		    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		      <ul class="nav navbar-nav">
+				    <li class="active"><a href="<?php echo U('/Home/Upload/index');?>">首页<span class="sr-only">(current)</span></a></li>
+                    <li class="btn-group btn-group-sm btn_css" role="group" aria-label="...">
+	              <button type="button" class="btn btn-default" onclick="JavaScript:history.go(-1);"/>
+	              <span class="glyphicon glyphicon-chevron-left"></span>
+	              </button>
+	              <button type="button" class="btn btn-default" onclick="JavaScript:window.history.forward();">
+	                <span class="glyphicon glyphicon-chevron-right"></span>
+	              </button>
+                </li>
+		      </ul>
+		  
+		      <ul class="nav navbar-nav navbar-right">
+		        <li id="CurrentTime" style="height: 50px;">
+		            <span class="glyphicon glyphicon-time"></span>
+		            <span id="now"></span>
+	            </li>
+		        <li>
+			      <a href="<?php echo U('/Home/Upload/login');?>">登录</a>
+		        </li>
+		        <li style="margin-right: 20px;">
+		       		<a href="<?php echo U('/Home/Upload/register');?>">注册</a>
+		        </li>
+		        <?php if(!empty($_SESSION['user_name'])): ?><li style="width: 46px;height: 50px;">
+	                	<img id="userimg" src="/thinkphp/blog/Public/<?php echo ($user_img); ?>">
+	                </li>
+	           		<li class="dropdown">
+	                	<a href="#" class="dropdown-toggle" id="aa" data-toggle="dropdown" style="margin-right: 100px;">
+	                    	<?php echo (session('user_name')); ?>
+	               		<span class="caret"></span>
+	                	</a>
+		                <ul id="mg_menu" class="dropdown-menu" role="menu">
+			                <li>
+			                <a href="<?php echo U('/Home/Upload/logout');?>"><span class="glyphicon glyphicon-off"></span>
+			                &nbsp;&nbsp;&nbsp;注销</a>
+					        </li>
+				            <li>
+		                	<a href="javascript:;" _link="<?php echo U('/Admin/Manager/edit_pwd');?>"><span class="glyphicon glyphicon-user"></span>
+		                     &nbsp;&nbsp;&nbsp;个人中心</a>
+		           			 </li>
+		                </ul>
+		            </li>
+	                <?php else: ?>
+	                <li id="login_state">未登录，请登录！</li><?php endif; ?>       
+		      </ul>
+		    </div><!-- /.navbar-collapse -->
+      </div>
+    </nav>
+</div>
+<!-- 博客导航图片 -->
+<div class="container" style="background: #eee;margin-top: 52px;">
+  <div class="row">
+    <!-- 左边内容 博文内容展示区 -->
+  	<div class="col-md-9" id="blogcontent"> 
+  	    <?php if(is_array($blog)): $i = 0; $__LIST__ = $blog;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$v): $mod = ($i % 2 );++$i;?><div class="bloglist row" >
+	  			<div class="col-md-12" style="margin-top: 5px;">
+		  		   <h4 class="col-md-12">
+		  		   <span class="label label-danger"><?php echo ($v["cat"]); ?></span>
+		  		     <b><?php echo ($v["title"]); ?></b>
+		  		   </h4>
+	  			</div>
+	  			<div class="col-md-12" style="margin-top: 10px;">
+		  			<div class="col-md-12">
+			  			<img src="/thinkphp/blog/Public/<?php echo ($v["blog_big_img"]); ?>" width="60%" height="300px">
+		  			</div>
+		  			<div class="col-md-12" style="color: #6C6C6C;margin-top: 10px;"><?php echo ($v["content"]); ?>
+		  			</div>
+	  			</div>
+	  			<div class="col-md-12" style="margin: 10px 0;color: #6C6C6C">
+	  				<div class="col-md-3">
+	  				    <img src="/thinkphp/blog/Public/<?php echo ($v["author_img"]); ?>" width="25px" height="25px">&nbsp;&nbsp;<?php echo ($v["author"]); ?>
+	  				</div>
+	  				<div class="col-md-3">
+	  					<span class="glyphicon glyphicon-time"></span>
+	  					<?php echo (date("Y-m-d H:i:s",$v["add_time"])); ?>
+	  				</div>
+	  				<div class="col-md-3">	
+	  					 <?php if($v['update_time'] > 0): ?><span class="glyphicon glyphicon-pencil"></span>
+                    	<?php echo (date("Y-m-d H:i:s",$v["update_time"])); ?>
+                    	<?php else: ?>
+                    	<span class="glyphicon glyphicon-pencil"></span>
+                    	未修改<?php endif; ?>
+	  				</div>
+	  				<div class="col-md-3">
+	  					<span class="glyphicon glyphicon-comment"></span>
+	  					评论
+	  					<?php echo ($v["com_count"]); ?>
+	  					<span class="glyphicon glyphicon-eye-open"></span>
+	  					阅读
+	  					<?php echo ($v["visit_count"]); ?>
+	  				</div>
+	  			</div>
+	  			<!-- 评论 -->
+	  			<div class="col-md-12">
+	  				<div class="col-md-12">
+	  		         <p style="margin-top: 5px;"><b>所有评论</b></p>
+	  		       
+                        <?php if(is_array($comment_info)): $i = 0; $__LIST__ = $comment_info;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$a): $mod = ($i % 2 );++$i;?><div style="background: #eee;margin-top: 10px;padding: 5px">
+                           <p><img src="/thinkphp/blog/Public/<?php echo ($a["com_img"]); ?>" width="25px" height="25px">&nbsp;&nbsp;<b><?php echo ($a["com_name"]); ?></b></p> 
+                           <p><?php echo ($a["comment"]); ?></p>
+                           <p style="color: #6C6C6C"><?php echo (date("Y-m-d H:i:s",$a["add_time"])); ?></p>
+                           </div><?php endforeach; endif; else: echo "" ;endif; ?>
+                      
+	  				</div>
+	  				<div class="col-md-12" style="margin-top: 10px;"><b>我要评论</b></div>
+	  				<div class="col-md-12">
+	  					<form action="<?php echo U('/Home/Upload/comment');?>" method="post" class="form-horizontal" role="form">
+			        	<textarea class="form-control" name="comment" rows="5" placeholder="请输入评论" style="margin-top: 10px;"></textarea>
+			        	<input type="hidden" name="com_blogid" value="<?php echo ($v["blog_id"]); ?>">
+			        	<input type="submit" class="btn btn-default" value="评论" id="commentsubmit">
+			        	</form>
+	  				</div>
+	  			</div>
+	  		</div><?php endforeach; endif; else: echo "" ;endif; ?>
+        
+  	</div>
+  	<!-- 右边内容 -->
+  	<div class="col-md-3" style="margin: 10px 0;">
+  	    <div class="row" style="margin: 15px 0 0 0;"><a class="btn btn-success btn-lg" href="<?php echo U('/Home/Upload/add_blog');?>" role="button" style="width: 100%;"><span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;你说</a></div>
+        <div class="col-md-12 Messagebook">
+        	<h4>留言板</h4>
+        	<div id="messagelist">
+        	<?php if(is_array($messageinfo)): $i = 0; $__LIST__ = $messageinfo;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$v): $mod = ($i % 2 );++$i;?><p><img src="/thinkphp/blog/Public/<?php echo ($v["user_img"]); ?>" width="25px" height="25px">&nbsp;&nbsp;<b><?php echo ($v["user_name"]); ?></b></p>
+        		<p style="color: #6C6C6C"><?php echo ($v["message"]); ?></p>
+        		<p style="color: #6C6C6C"><?php echo (date("Y-m-d H:i:s",$v["add_time"])); ?></p><?php endforeach; endif; else: echo "" ;endif; ?>
+        	</div>
+        	<form action="<?php echo U('/Home/Upload/message_book');?>" method="post" class="form-horizontal" role="form">
+        	<textarea class="form-control" name="message" rows="2" placeholder="请输入留言" style="margin-top: 10px;"></textarea>
+        	<input type="submit" class="btn btn-default" value="留言" id="messagesubmit">
+        	</form>
+        </div>
+        <div class="col-md-12 Messagebook">
+        	<h4>最热博文</h4>
+        	<?php if(is_array($blog_info)): $i = 0; $__LIST__ = $blog_info;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$v): $mod = ($i % 2 );++$i;?><p><b><?php echo ($v["title"]); ?></b><span style="color: #6C6C6C"></span>&nbsp;&nbsp;<span class="badge"><?php echo ($v["visit_count"]); ?></span></p><?php endforeach; endif; else: echo "" ;endif; ?>
+        </div>
+        <div class="col-md-12 Messagebook">
+        	<h4>活跃博客</h4>
+        	<?php if(is_array($user_info)): $i = 0; $__LIST__ = $user_info;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$v): $mod = ($i % 2 );++$i;?><p><img src="/thinkphp/blog/Public/<?php echo ($v["user_img"]); ?>" width="30px" height="30px">
+        	<b><?php echo ($v["user_name"]); ?></b>&nbsp;&nbsp;<span class="badge"><?php echo ($v["login_count"]); ?></span></p><?php endforeach; endif; else: echo "" ;endif; ?>
+        </div>
+    </div>
+  </div>
+</div>
+<div id="footer">
+	dddd
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+    	//留言板
+        $('#messagesubmit').click(function(){
+            if($('textarea').val()==""){
+	           alert("留言内容不能为空");
+			   return false;
+			}else{
+			   return true;
+			};
+        });
+        //博文评论
+        $('#commentsubmit').click(function(){
+            if($('textarea').val()==""){
+	           alert("评论内容不能为空");
+			   return false;
+			}else{
+			   return true;
+			};
+        });
+        //动态显示当前时间
+    	setInterval(function() {
+      	var now = (new Date()).toLocaleString();
+      	$('#now').text(now);
+   		 }, 1000);
+
+    })
+</script>
+
+</body>
+</html>

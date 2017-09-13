@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>博文分类</title>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/style.css">
+<script type="text/javascript" src="__PUBLIC__/js/jquery-3.1.0.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/bootstrap.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+<div class="opicon row">
+     <div class="col-md-1" style="margin: 15px 0;">
+		<a href="{:U('/Admin/manager/add_mg')}">
+		<button type="button" class="btn btn-success"><span class="glyphicon glyphicon-plus-sign"></span>&nbsp;添加管理员</button>
+		</a>
+	</div>
+</div>
+<div class="list">
+	<form action="{:U('/Admin/manager/login')}" method="POST">
+	    <table class="table table-bordered">
+	        <thead>
+	        <tr class="active">
+	            <th>编号</th>
+	            <th>管理员</th>
+	            <th>头像</th>
+	            <th>手机号码</th>
+	            <th>邮箱</th>
+	            <th>添加时间</th>
+	            <th>修改时间</th>
+	            <th>操作</th>
+	        </tr>
+	        </thead>
+	        <?php foreach($mg_info as $k => $v):?>
+	        <tbody>
+	        <tr>
+	            <td>{$v.mg_id}</td>
+	            <td>{$v.mg_name}</td>
+	            <td><img src="__PUBLIC__/{$v.mg_small_img}" width="25px" height="25px"></td>
+	            <td>{$v.mg_phone}</td>
+	            <td>{$v.mg_email}</td>
+	            <td>{$v.add_time|date="Y-m-d H:i:s",###}</td>
+	            <td>
+                    <if condition="$v['update_time'] gt 0">
+                    	{$v.update_time|date="Y-m-d H:i:s",###}
+                    	<else/>
+                    	未修改
+                    </if>
+	            </td>
+	            <td class="operation">
+	            <a href="{:U('/Admin/manager/edit_mg/mg_id/'.$v['mg_id'])}">
+	            <button type="button" class="btn btn-default btn-xs btn-primary">
+	            <span class="glyphicon glyphicon-edit"></span>
+	            编辑
+	            </button>
+	            </a>
+	            <a href="{:U('/Admin/manager/del_mg/mg_id/'.$v['mg_id'])}">
+	            <button type="button" class="btn btn-default btn-xs btn-danger">
+	            <span class="glyphicon glyphicon-trash"></span>
+	            删除</button>
+	            </a>
+	            </td>
+	        </tr>
+	        </tbody>
+	        <?php endforeach;?>
+	    </table>
+	</form>
+	<div class="page">{$show}</div>
+</div>
+</div>
+</body>
+</html>
